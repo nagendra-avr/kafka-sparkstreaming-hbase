@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.kafka.sparkstreaming.hbase</groupId>
+	<artifactId>kafka-spark-streaming-hbase-example</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	 <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spark.core.version>1.5.0-cdh5.5.0</spark.core.version>
+		<!--hbase.version>0.98.7-hadoop1</hbase.version-->
+		<hbase.version>1.0.1</hbase.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<guava.version>13.0.1</guava.version>
+		<gson.version>2.2.4</gson.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>cloudera-repo-releases</id>
+			<url>http://repository.cloudera.com/artifactory/repo/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Spark Dependencies -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.10</artifactId>
+			<version>${spark.core.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming_2.10</artifactId>
+			<version>1.5.0-cdh5.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming-kafka_2.10</artifactId>
+			<version>1.5.0-cdh5.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcabi.incubator</groupId>
+			<artifactId>xembly</artifactId>
+			<version>0.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	 <build>
+	<pluginManagement>
+		<plugins>
+		<plugin>
+		<groupId>org.scala-tools</groupId>
+		<artifactId>maven-scala-plugin</artifactId>
+		<version>2.15.2</version>
+		</plugin>
+		<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.1</version>
+		<configuration>
+		<source>1.6</source>
+		<target>1.6</target>
+		</configuration>
+		</plugin>
+		</plugins>
+		</pluginManagement>
+		<plugins>
+		<plugin>
+		<groupId>org.scala-tools</groupId>
+		<artifactId>maven-scala-plugin</artifactId>
+		<executions>
+		<execution>
+		<id>scala-compile-first</id>
+		<phase>process-resources</phase>
+		<goals>
+		<goal>add-source</goal>
+		<goal>compile</goal>
+		</goals>
+		</execution>
+		<execution>
+		<id>scala-test-compile</id>
+		<phase>process-test-resources</phase>
+		<goals>
+		<goal>testCompile</goal>
+		</goals>
+		</execution>
+		</executions>
+		</plugin>
+		<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-shade-plugin</artifactId>
+		<version>1.4</version>
+		<configuration>
+		<createDependencyReducedPom>true</createDependencyReducedPom>
+		</configuration>
+		<executions>
+		<execution>
+		<phase>package</phase>
+		<goals>
+		<goal>shade</goal>
+		</goals>
+		<configuration>
+		<transformers>
+		<transformer
+		implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+		<transformer
+		implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+		<mainClass></mainClass>
+		</transformer>
+		</transformers>
+		<filters>
+		<filter>
+		<artifact>*:*</artifact>
+		<excludes>
+		<exclude>META-INF/*.SF</exclude>
+		<exclude>META-INF/*.DSA</exclude>
+		<exclude>META-INF/*.RSA</exclude>
+		</excludes>
+		</filter>
+		</filters>
+		</configuration>
+		</execution>
+		</executions>
+		</plugin>
+		</plugins>
+	</build>
+</project>
