@@ -1,4 +1,4 @@
-Kafka-SparkStreaming-HBase Application
+# Kafka-SparkStreaming-HBase Application
 
 A Spark streaming application that receives the live streaming from Kafka, process and stores back into Hbase
 
