@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.*;
 
 
+import com.kafka.sparkstreaming.functions.HbasePutConvertFunction;
+import com.kafka.sparkstreaming.functions.HbaseSaveFunction;
 import com.kafka.sparkstreaming.model.Meter;
 import kafka.serializer.StringDecoder;
 
@@ -34,7 +36,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
  * @author Nagendra Amalakanta
  *
  */
-public class FaultDetectionDriver extends BaseDriver{
+public class FaultDetectionDriver extends BaseDriver {
 
 	/**
 	 * 
@@ -93,34 +95,13 @@ public class FaultDetectionDriver extends BaseDriver{
                 }
             });
 
-           JavaPairDStream<ImmutableBytesWritable, Put> meterPairStream =  meterStream.mapToPair(new PairFunction<Meter, ImmutableBytesWritable, Put>() {
+            //Convert meter dstream to pair of immutable bytes and put objects
+           JavaPairDStream<ImmutableBytesWritable, Put> meterPairStream =  meterStream.mapToPair(new HbasePutConvertFunction());
 
-               @Override
-               public Tuple2<ImmutableBytesWritable, Put> call(Meter meter) throws Exception {
-                   Put put = new Put(Bytes.toBytes(meter.getMeterID()));
-                   put.add(Bytes.toBytes("meter"), Bytes.toBytes("MeterID"), Bytes.toBytes(meter.getMeterID()));
-                   put.add(Bytes.toBytes("meter"), Bytes.toBytes("MeterStatus"), Bytes.toBytes(meter.getMeterStatus()));
-                   put.add(Bytes.toBytes("meter"), Bytes.toBytes("MeterTime"), Bytes.toBytes(meter.getMeterTime()));
-                   return new Tuple2<ImmutableBytesWritable, Put>(new ImmutableBytesWritable(), put);
-               }
-           });
 
-            Configuration hbaseconf = HBaseConfiguration.create();
-            hbaseconf.set(TableOutputFormat.OUTPUT_TABLE, "meter");
-            hbaseconf.set("hbase.zookeeper.quorum", "localhost:2181");
+            //Save to Hbase
+            meterPairStream.foreachRDD(new HbaseSaveFunction());
 
-            final Configuration jobConf = new Configuration(hbaseconf);
-            jobConf.set("mapreduce.job.output.key.class", "Text");
-            jobConf.set("mapreduce.job.output.value.class", "Text");
-            jobConf.set("mapreduce.outputformat.class", "TableOutputFormat");
-
-            meterPairStream.foreachRDD(new Function<JavaPairRDD<ImmutableBytesWritable, Put>, Void>() {
-                @Override
-                public Void call(JavaPairRDD<ImmutableBytesWritable, Put> immutableBytesWritablePutJavaPairRDD) throws Exception {
-                    immutableBytesWritablePutJavaPairRDD.saveAsNewAPIHadoopDataset(jobConf);
-                    return null;
-                }
-            });
 			driver.start();
 			driver.stop();
 
