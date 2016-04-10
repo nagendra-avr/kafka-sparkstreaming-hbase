@@ -160,7 +160,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>com.kafka.sparkstreaming.driver.FaultDetectionDriver</mainClass>
+							<mainClass>com.kafka.sparkstreaming.kafka.MeterSignalsProducer</mainClass>
 						</manifest>
 					</archive>
 
