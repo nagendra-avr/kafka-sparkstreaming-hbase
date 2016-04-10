@@ -12,7 +12,7 @@ To get Started:
 
 ## Commands:
 
-* java -jar target/kafka-spark-streaming-hbase-example-0.1-SNAPSHOT-jar-with-dependencies.jar com.kafka.sparkstreaming.kafka.MeterSignalsProducer
+* java -jar target/kafka-spark-streaming-hbase-example-0.1-SNAPSHOT-jar-with-dependencies.jar test 20
 
 * /usr/lib/spark/bin/spark-submit --class com.kafka.sparkstreaming.driver.FaultDetectionDriver --master local[3] target/kafka-spark-streaming-hbase-example-0.1-SNAPSHOT-jar-with-dependencies.jar
 
