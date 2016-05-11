@@ -17,14 +17,17 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}/site</directory>
-            <outputDirectory>docs</outputDirectory>
-        </fileSet>
-        <fileSet>
             <directory>src/main/bin</directory>
             <outputDirectory>bin</outputDirectory>
             <includes>
                 <include>*.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/log</directory>
+            <outputDirectory>log</outputDirectory>
+            <includes>
+                <include>*.log</include>
             </includes>
         </fileSet>
         <fileSet>
