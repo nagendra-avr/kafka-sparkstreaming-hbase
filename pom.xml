@@ -72,9 +72,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</dependencies>
 
 	 <build>
-	<pluginManagement>
-		<plugins>
-		<plugin>
+			<plugins>
+		<!-- <plugin>
 		<groupId>org.scala-tools</groupId>
 		<artifactId>maven-scala-plugin</artifactId>
 		<version>2.15.2</version>
@@ -147,23 +146,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		</configuration>
 		</execution>
 		</executions>
-		</plugin>
+		</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4.1</version>
 				<configuration>
 					<!-- get all project dependencies -->
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<!-- MainClass in mainfest make a executable jar -->
-					<archive>
-						<manifest>
-							<mainClass>com.kafka.sparkstreaming.driver.FaultDetectionDriver</mainClass>
-						</manifest>
-					</archive>
 
+					<descriptors>
+						<descriptor>src/main/assembly/assembly.xml</descriptor>
+					</descriptors>
+					<!-- MainClass in mainfest make a executable jar -->
 				</configuration>
 				<executions>
 					<execution>
